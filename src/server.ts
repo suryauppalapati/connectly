@@ -1,11 +1,12 @@
 import app from './app.ts';
 import { env } from './config/env.ts';
+import logger from './config/logger.ts';
 import { closeDb, initDb } from './db/index.ts';
 
 initDb();
 
 const server = app.listen(env.PORT, () => {
-  console.log(`Server up and running at port: ${env.PORT}`);
+  logger.info(`Server up and running at port: ${env.PORT}`);
 });
 
 const shutdown = (signal: string) => {
