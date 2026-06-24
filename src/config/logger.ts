@@ -4,7 +4,7 @@ import { loggerStore } from './loggerStore.ts';
 
 const { combine, timestamp, json, colorize, printf, errors } = winston.format;
 
-// Extract corelationId from AsyncLocalStorage and inject it into the log
+// Extract reqId from AsyncLocalStorage and inject it into the log
 const injectCorelationId = winston.format((info) => {
   const store = loggerStore.getStore();
   if (store?.corelationId) {
@@ -18,10 +18,11 @@ const devFormat = combine(
   colorize(),
   timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   errors({ stack: true }),
-  printf(
-    ({ level, message, timestamp, stack, corelationId, ...meta }) =>
-      `[${timestamp}] ${level}: ${message} ${Object.keys(meta).length > 0 ? JSON.stringify(meta): ""}`,
-  ),
+  printf(({ level, message, timestamp, stack, correlationId, ...meta }) => {
+    const metadata = Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : '';
+    const id = correlationId ? ` [${correlationId}]` : '';
+    return `[${timestamp}] ${level}:${id} ${message}${metadata}`;
+  }),
 );
 
 // Prod format: Structured JSON, stack traces, corelationId

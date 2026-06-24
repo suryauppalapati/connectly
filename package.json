@@ -14,7 +14,7 @@
     "db:studio": "drizzle-kit studio",
     "lint": "biome check",
     "lint:fix": "biome check --write",
-    "lint:unsafe": "biome check --write --unsafe",
+    "lint:fix-unsafe": "biome check --write --unsafe",
     "format": "biome format --write",
     "format:check": "biome format"
   },
