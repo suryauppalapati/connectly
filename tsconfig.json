@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    /* Language & Modules */
+    "target": "ES2022", // Modern Node output
+    "module": "NodeNext", // Native Node module system
+    "moduleResolution": "NodeNext", // Node-style resolution
+    "lib": ["ES2024"], // Latest JS APIs
+
+    /* Project Structure */
+    "rootDir": "./src", // Source directory
+
+    /* Type Safety */
+    "strict": true, // Enable strict checks
+    "noUnusedParameters": true, // Disallow unused params
+    "noUnusedLocals": true, // Disallow unused locals
+    "noFallthroughCasesInSwitch": true, // Prevent switch fallthroughs
+
+    /* Interop */
+    "esModuleInterop": true, // Better CJS compatibility
+    "resolveJsonModule": true, // Allow JSON imports
+
+    /* Build Tools */
+    "isolatedModules": true, // Required by transpilers
+    "allowImportingTsExtensions": true, // Allow .ts imports
+    "noEmit": true, // Type-check only
+    /* DX */
+    "forceConsistentCasingInFileNames": true, // Enforce file casing
+    "skipLibCheck": true, // Skip d.ts checking
+
+    /* Aliases */
+    "paths": {
+      "@/*": ["./src/*"] // @ -> src
+    }
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

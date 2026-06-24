@@ -1,0 +1,116 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+
+  "files": {
+    "includes": ["src/**", "!src/db/migrations"]
+  },
+
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUnusedImports": "error",
+        "noUndeclaredVariables": "error"
+      },
+
+      "suspicious": {
+        "noExplicitAny": "error",
+        "noConsole": "off",
+        "noDoubleEquals": "error",
+        "noRedeclare": "error",
+        "noShadowRestrictedNames": "error",
+        "useAwait": "warn",
+        "noEmptyBlockStatements": "warn",
+        "noAsyncPromiseExecutor": "error",
+        "noAssignInExpressions": "error",
+        "noFallthroughSwitchClause": "error",
+        "useIsArray": "error"
+      },
+
+      "style": {
+        "useConst": "error",
+        "noNonNullAssertion": "warn",
+        "useNodejsImportProtocol": "error",
+        "useImportType": "error",
+        "useExportType": "error",
+        "noParameterAssign": "error",
+        "useTemplate": "warn",
+        "useSingleVarDeclarator": "error",
+        "useDefaultParameterLast": "error",
+        "useThrowNewError": "error",
+        "useConsistentArrowReturn": "warn",
+        "noMagicNumbers": "error",
+        "useNumberNamespace": "error",
+        "useExponentiationOperator": "warn",
+        "useNumericSeparators": "warn",
+        "noNestedTernary": "warn"
+      },
+
+      "complexity": {
+        "noForEach": "warn",
+        "noUselessCatch": "error",
+        "noUselessConstructor": "error",
+        "noUselessRename": "error",
+        "noUselessTypeConstraint": "error",
+        "noUselessEmptyExport": "error",
+        "noUselessTernary": "error",
+        "noUselessLabel": "error",
+        "noThisInStatic": "error",
+        "useOptionalChain": "error",
+        "useFlatMap": "warn",
+        "useArrowFunction": "warn",
+        "noStaticOnlyClass": "warn",
+        "noExcessiveCognitiveComplexity": {
+          "level": "warn",
+          "options": { "maxAllowedComplexity": 25 }
+        }
+      },
+
+      "security": {
+        "noGlobalEval": "error"
+      },
+
+      "nursery": {
+        "noFloatingPromises": "error",
+        "noDrizzleDeleteWithoutWhere": "error",
+        "noDrizzleUpdateWithoutWhere": "error",
+        "useImportsFirst": "warn",
+        "noMisusedPromises": "warn"
+      }
+    }
+  },
+
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "arrowParentheses": "always"
+    }
+  },
+
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  }
+}
