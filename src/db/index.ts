@@ -1,43 +1,36 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { seed } from 'drizzle-seed';
 import pg from 'pg';
 import { env } from '@/config/env.ts';
+import logger from '@/config/logger.ts';
 import * as schema from '@/db/schema/index.ts';
 
-type DrizzleDb = ReturnType<typeof drizzle<typeof schema>>;
+// Instantiated synchronously at startup
+export const pool = new pg.Pool({
+  connectionString: env.DATABASE_URL,
+  connectionTimeoutMillis: 5000,
+  idleTimeoutMillis: 30_000,
+});
 
-let pool: pg.Pool;
-let db: DrizzleDb;
+export const db = drizzle({
+  client: pool,
+  schema,
+  logger: env.NODE_ENV === 'development',
+});
 
-export const initDb = (): void => {
+// Verify the connection during the server bootup
+export const initDb = async (): Promise<void> => {
   try {
-    pool = new pg.Pool({
-      connectionString: env.DATABASE_URL,
-      connectionTimeoutMillis: 5000, // fail fast after 5s
-      idleTimeoutMillis: 30_000, // release idle connections after 30s
-    });
-
-    // verify connection
-    pool.query('SELECT 1');
-
-    db = drizzle({
-      client: pool,
-      schema,
-      logger: env.NODE_ENV === 'development',
-    });
-
-    console.log('Database connected successfully');
+    await pool.query('SELECT 1');
+    seed(db, {});
+    logger.info('Database connected successfully');
   } catch (error) {
-    console.error('Failed to initialise the database connection', error);
+    logger.error('Failed to initialise the database connection', error);
     process.exit(1);
   }
 };
 
 export const closeDb = async (): Promise<void> => {
   await pool.end();
-  console.log('Database pool closed');
-};
-
-export const getDb = (): DrizzleDb => {
-  if (!db) throw new Error('Database not initialized');
-  return db;
+  console.info('Database pool closed');
 };

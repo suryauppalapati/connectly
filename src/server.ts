@@ -3,17 +3,17 @@ import { env } from './config/env.ts';
 import logger from './config/logger.ts';
 import { closeDb, initDb } from './db/index.ts';
 
-initDb();
+await initDb();
 
 const server = app.listen(env.PORT, () => {
   logger.info(`Server up and running at port: ${env.PORT}`);
 });
 
 const shutdown = (signal: string) => {
-  console.log(`${signal} received, shutting down gracefully`);
+  logger.info(`${signal} received, shutting down gracefully`);
   server.close(async () => {
     await closeDb();
-    console.log('HTTP server closed');
+    logger.info('HTTP server closed');
     process.exit(0);
   });
 };

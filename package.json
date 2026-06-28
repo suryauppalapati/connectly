@@ -27,6 +27,7 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
+    "drizzle-seed": "^0.3.1",
     "express": "^5.2.1",
     "http-status-codes": "^2.3.0",
     "pg": "^8.22.0",
