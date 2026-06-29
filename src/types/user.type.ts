@@ -1,7 +1,7 @@
-import type { usersTable } from '@/db/schema/users.ts';
+import { usersTable } from '@/db/schema/users.ts';
 
-type User = typeof usersTable.$inferSelect;
+const userEntity = usersTable.$inferSelect;
 
-type NewUser = typeof usersTable.$inferSelect;
+type UserEntity = typeof userEntity;
 
-export type { NewUser, User };
+export type { UserEntity };

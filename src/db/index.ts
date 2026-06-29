@@ -22,7 +22,9 @@ export const db = drizzle({
 export const initDb = async (): Promise<void> => {
   try {
     await pool.query('SELECT 1');
-    seed(db, {});
+    if (env.NODE_ENV === 'development') {
+      await seed(db, schema, { count: 25 });
+    }
     logger.info('Database connected successfully');
   } catch (error) {
     logger.error('Failed to initialise the database connection', error);
@@ -32,5 +34,5 @@ export const initDb = async (): Promise<void> => {
 
 export const closeDb = async (): Promise<void> => {
   await pool.end();
-  console.info('Database pool closed');
+  logger.info('Database pool closed');
 };

@@ -1,8 +1,8 @@
 import crypto from 'node:crypto';
 import type { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import logger from '../config/logger.ts';
-import { loggerStore } from '../config/loggerStore.ts';
+import logger from '@/config/logger.ts';
+import { loggerStore } from '@/config/loggerStore.ts';
 
 const getLogLevel = (statusCode: number) => {
   if (statusCode >= StatusCodes.INTERNAL_SERVER_ERROR) return 'error';
@@ -11,12 +11,12 @@ const getLogLevel = (statusCode: number) => {
 };
 
 export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
-  const corelationId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
-  res.setHeader('X-Correlation-Id', corelationId);
+  const correlationId = (req.headers['x-request-id'] as string) || crypto.randomUUID();
+  res.setHeader('X-Correlation-Id', correlationId);
 
   const startTime = performance.now();
 
-  loggerStore.run({ corelationId }, () => {
+  loggerStore.run({ correlationId }, () => {
     logger.info('Incoming Request', {
       method: req.method,
       url: req.originalUrl,
