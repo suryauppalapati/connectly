@@ -7,7 +7,7 @@ import type {
   updateUserBodySchema,
   updateUserParamSchema,
 } from '@/dtos/user.dto.ts';
-import type { ValidatedRequest } from '@/middleware/validator.ts';
+import { typedRequest } from '@/middleware/validator.ts';
 import {
   createUser,
   deleteUser as deleteUserService,
@@ -16,12 +16,9 @@ import {
   updateUserInfo,
 } from '@/services/user.service.ts';
 
-const addNewUser = async (
-  req: ValidatedRequest<{ body: typeof createUserBodySchema }>,
-  res: Response,
-) => {
-  const payload = req.body;
-  const user = await createUser(payload);
+const addNewUser = async (req: Request, res: Response) => {
+  const { body } = typedRequest<{ body: typeof createUserBodySchema }>(req);
+  const user = await createUser(body);
   res.status(StatusCodes.CREATED).send(user);
 };
 
@@ -30,11 +27,9 @@ const listUsers = async (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).send(users);
 };
 
-const getUserById = async (
-  req: ValidatedRequest<{ params: typeof getUserParamSchema }>,
-  res: Response,
-) => {
-  const user = await getUser(req.params.id);
+const getUserById = async (req: Request, res: Response) => {
+  const { params } = typedRequest<{ params: typeof getUserParamSchema }>(req);
+  const user = await getUser(params.id);
 
   if (!user) {
     res.status(StatusCodes.NOT_FOUND).send({ error: 'User not found' });
@@ -43,25 +38,18 @@ const getUserById = async (
   res.status(StatusCodes.OK).send(user);
 };
 
-const updateUser = async (
-  req: ValidatedRequest<{
+const updateUser = async (req: Request, res: Response) => {
+  const { params, body } = typedRequest<{
     body: typeof updateUserBodySchema;
     params: typeof updateUserParamSchema;
-  }>,
-  res: Response,
-) => {
-  const { id } = req.params;
-  const updates = req.body;
-  const updatedUser = await updateUserInfo(updates, id);
+  }>(req);
+  const updatedUser = await updateUserInfo(body, params.id);
   res.status(StatusCodes.OK).send(updatedUser);
 };
 
-const deleteUser = async (
-  req: ValidatedRequest<{ params: typeof deleteUserParamSchema }>,
-  res: Response,
-) => {
-  const userId = req.params.id;
-  const user = await deleteUserService(userId);
+const deleteUser = async (req: Request, res: Response) => {
+  const { params } = typedRequest<{ params: typeof deleteUserParamSchema }>(req);
+  const user = await deleteUserService(params.id);
   res.status(StatusCodes.OK).send(user);
 };
 

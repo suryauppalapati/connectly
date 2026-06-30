@@ -16,11 +16,22 @@ type InferOrDefault<T extends AnyZodObject | undefined, Default> = T extends Any
   ? z.infer<T>
   : Default;
 
-type ValidatedRequest<S extends RequestSchemas> = Omit<Request, 'body' | 'params' | 'query'> & {
+type TypedData<S extends RequestSchemas> = {
   body: InferOrDefault<S['body'], unknown>;
   params: InferOrDefault<S['params'], Record<string, string>>;
   query: InferOrDefault<S['query'], Record<string, string>>;
 };
+
+/**
+ * Casts an Express request to its Zod-validated shape.
+ * Call this in controllers after `validateRequest` middleware has run.
+ *
+ * @example
+ * const { body, params } = typedRequest<{ body: typeof createUserBodySchema }>(req);
+ */
+function typedRequest<S extends RequestSchemas>(req: Request): TypedData<S> {
+  return req as unknown as TypedData<S>;
+}
 
 function validateRequest<S extends RequestSchemas>(schemas: S) {
   return async (request: Request, response: Response, next: NextFunction) => {
@@ -33,7 +44,7 @@ function validateRequest<S extends RequestSchemas>(schemas: S) {
     } catch (error) {
       if (error instanceof ZodError) {
         response.status(StatusCodes.BAD_REQUEST).json({
-          message: 'Invalid request body',
+          message: 'Validation failed',
           success: false,
           error: prettifyZodErrors(error),
         });
@@ -44,5 +55,5 @@ function validateRequest<S extends RequestSchemas>(schemas: S) {
   };
 }
 
-export type { ValidatedRequest };
-export { validateRequest };
+export type { TypedData };
+export { typedRequest, validateRequest };
