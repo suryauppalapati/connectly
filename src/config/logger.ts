@@ -7,8 +7,8 @@ const { combine, timestamp, json, colorize, printf, errors } = winston.format;
 // Extract reqId from AsyncLocalStorage and inject it into the log
 const injectCorelationId = winston.format((info) => {
   const store = loggerStore.getStore();
-  if (store?.corelationId) {
-    info.correlationId = store.corelationId;
+  if (store?.correlationId) {
+    info.correlationId = store.correlationId;
   }
   return info;
 });
@@ -25,7 +25,7 @@ const devFormat = combine(
   }),
 );
 
-// Prod format: Structured JSON, stack traces, corelationId
+// Prod format: Structured JSON, stack traces, correlationId
 const prodFormat = combine(injectCorelationId(), timestamp(), errors({ stack: true }), json());
 
 const logger = winston.createLogger({

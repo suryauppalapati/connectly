@@ -26,7 +26,7 @@ This enables ~60 rules that Biome considers universally correct. They catch genu
 | Rule                        | Severity | Why                                                                                                                         |
 | --------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `noExplicitAny`             | `error`  | Defeats TypeScript's purpose. Forces proper typing.                                                                         |
-| `noConsole`                 | `warn`   | Reminds you to use a proper logger. Warn, not error — you need `console.log` during dev.                                    |
+| `noConsole`                 | `warn`   | Reminds you to use a proper logger. Warn, not error — you need `logger.info` during dev.                                    |
 | `noDoubleEquals`            | `error`  | `==` coercion causes silent bugs (`"0" == false` is `true`). Always use `===`.                                              |
 | `noRedeclare`               | `error`  | Redeclaring variables in the same scope is always a bug.                                                                    |
 | `noShadowRestrictedNames`   | `error`  | Naming a variable `undefined`, `NaN`, `Infinity` etc. is a guaranteed footgun.                                              |
@@ -41,24 +41,24 @@ This enables ~60 rules that Biome considers universally correct. They catch genu
 
 ## Style — Consistency that prevents confusion
 
-| Rule                        | Severity | Why                                                                                               |
-| --------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `useConst`                  | `error`  | If a variable is never reassigned, it should be `const`.                                          |
-| `noNonNullAssertion`        | `warn`   | `value!` silences TypeScript. Warn to flag it — sometimes legitimate.                             |
-| `useNodejsImportProtocol`   | `error`  | `import 'node:fs'` over `import 'fs'` — modern Node.js standard, disambiguates from npm packages. |
-| `useImportType`             | `error`  | `import type { X }` for type-only imports — better tree-shaking and build performance.            |
-| `useExportType`             | `error`  | Same as above, for exports.                                                                       |
-| `noParameterAssign`         | `error`  | Reassigning function params mutates `arguments` and causes confusion.                             |
-| `useTemplate`               | `warn`   | Prefer template literals over `'hello ' + name`. Warn because sometimes concatenation is clearer. |
-| `useSingleVarDeclarator`    | `error`  | `const a = 1, b = 2` → separate declarations. Cleaner diffs.                                      |
-| `useDefaultParameterLast`   | `error`  | `fn(a = 1, b)` is confusing — defaults should come last.                                          |
-| `useThrowNewError`          | `error`  | `throw Error()` → `throw new Error()`. Consistency.                                               |
-| `useConsistentArrowReturn`  | `warn`   | Enforces that arrow functions either always return a value implicitly/explicitly or never return. |
-| `noMagicNumbers`            | `error`  | Flags unnamed numeric constants. Forces declaring meaningful constants (e.g. `const PORT = 3000`).|
-| `useNumberNamespace`        | `error`  | `Number.parseInt()` over `parseInt()`. Avoids global pollution.                                   |
-| `useExponentiationOperator` | `warn`   | `x ** 2` over `Math.pow(x, 2)`. Cleaner.                                                          |
-| `useNumericSeparators`      | `warn`   | `1_000_000` over `1000000`. Readability.                                                          |
-| `noNestedTernary`           | `warn`   | Deeply nested ternaries are unreadable. Warn, not error — one level is fine.                      |
+| Rule                        | Severity | Why                                                                                                |
+| --------------------------- | -------- | -------------------------------------------------------------------------------------------------- |
+| `useConst`                  | `error`  | If a variable is never reassigned, it should be `const`.                                           |
+| `noNonNullAssertion`        | `warn`   | `value!` silences TypeScript. Warn to flag it — sometimes legitimate.                              |
+| `useNodejsImportProtocol`   | `error`  | `import 'node:fs'` over `import 'fs'` — modern Node.js standard, disambiguates from npm packages.  |
+| `useImportType`             | `error`  | `import type { X }` for type-only imports — better tree-shaking and build performance.             |
+| `useExportType`             | `error`  | Same as above, for exports.                                                                        |
+| `noParameterAssign`         | `error`  | Reassigning function params mutates `arguments` and causes confusion.                              |
+| `useTemplate`               | `warn`   | Prefer template literals over `'hello ' + name`. Warn because sometimes concatenation is clearer.  |
+| `useSingleVarDeclarator`    | `error`  | `const a = 1, b = 2` → separate declarations. Cleaner diffs.                                       |
+| `useDefaultParameterLast`   | `error`  | `fn(a = 1, b)` is confusing — defaults should come last.                                           |
+| `useThrowNewError`          | `error`  | `throw Error()` → `throw new Error()`. Consistency.                                                |
+| `useConsistentArrowReturn`  | `warn`   | Enforces that arrow functions either always return a value implicitly/explicitly or never return.  |
+| `noMagicNumbers`            | `error`  | Flags unnamed numeric constants. Forces declaring meaningful constants (e.g. `const PORT = 3000`). |
+| `useNumberNamespace`        | `error`  | `Number.parseInt()` over `parseInt()`. Avoids global pollution.                                    |
+| `useExponentiationOperator` | `warn`   | `x ** 2` over `Math.pow(x, 2)`. Cleaner.                                                           |
+| `useNumericSeparators`      | `warn`   | `1_000_000` over `1000000`. Readability.                                                           |
+| `noNestedTernary`           | `warn`   | Deeply nested ternaries are unreadable. Warn, not error — one level is fine.                       |
 
 ---
 
