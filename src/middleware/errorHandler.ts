@@ -5,22 +5,23 @@ import logger from '@/config/logger.ts';
 import { AppError } from '@/errors/index.ts';
 
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  logger.error('Unhandled Exception Caught', err);
-
   const isDev = env.NODE_ENV === 'development';
 
   if (err instanceof AppError) {
+    logger.error('AppError', err);
     return res.status(err.statusCode).json({
       success: false,
       isOperational: err.isOperational,
       error: {
         message: err.message,
         code: err.code,
-        details: err.details || [], // validation errors
+        details: err.details ?? [],
         ...(isDev && { stack: err.stack }),
       },
     });
   }
+
+  logger.error('Unhandled Exception Caught', err);
 
   res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     success: false,
