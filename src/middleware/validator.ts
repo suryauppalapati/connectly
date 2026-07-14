@@ -44,6 +44,7 @@ function validateRequest<S extends RequestSchemas>(schemas: S) {
     } catch (error) {
       if (error instanceof ZodError) {
         next(new BadRequestError('Validation failed', prettifyZodErrors(error)));
+        return;
       }
       next(error);
     }
