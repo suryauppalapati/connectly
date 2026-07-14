@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import z, { ZodError, type ZodObject } from 'zod';
+import { BadRequestError } from '@/errors/index.ts';
 import { prettifyZodErrors } from '@/utils/zod.util.ts';
 
 // biome-ignore lint/suspicious/noExplicitAny: ZodObject generic parameters require any for broad compatibility
@@ -34,7 +34,7 @@ function typedRequest<S extends RequestSchemas>(req: Request): TypedData<S> {
 }
 
 function validateRequest<S extends RequestSchemas>(schemas: S) {
-  return async (request: Request, response: Response, next: NextFunction) => {
+  return async (request: Request, _response: Response, next: NextFunction) => {
     try {
       const { body, params, query } = schemas;
       if (body) request.body = await body.parseAsync(request.body);
@@ -43,11 +43,7 @@ function validateRequest<S extends RequestSchemas>(schemas: S) {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        response.status(StatusCodes.BAD_REQUEST).json({
-          message: 'Validation failed',
-          success: false,
-          error: prettifyZodErrors(error),
-        });
+        next(new BadRequestError('Validation failed', prettifyZodErrors(error)));
         return;
       }
       next(error);

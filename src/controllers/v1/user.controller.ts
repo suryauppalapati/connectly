@@ -7,6 +7,7 @@ import type {
   updateUserBodySchema,
   updateUserParamSchema,
 } from '@/dtos/user.dto.ts';
+import { NotFoundError } from '@/errors/index.ts';
 import { typedRequest } from '@/middleware/validator.ts';
 import {
   createUser,
@@ -32,8 +33,7 @@ const getUserById = async (req: Request, res: Response) => {
   const user = await getUser(params.id);
 
   if (!user) {
-    res.status(StatusCodes.NOT_FOUND).send({ error: 'User not found' });
-    return;
+    throw new NotFoundError('User not found');
   }
   res.status(StatusCodes.OK).send(user);
 };

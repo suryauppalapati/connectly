@@ -6,9 +6,9 @@ import { v1Router } from './routes/v1/index.ts';
 
 const app: Express = express();
 
+app.use(helmet());
 app.use(express.json());
 app.use(requestLogger);
-app.use(helmet());
 
 app.use('/api/v1', v1Router);
 
